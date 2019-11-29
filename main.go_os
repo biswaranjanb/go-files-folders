@@ -1,0 +1,55 @@
+package main
+
+import (
+	"os"
+	"log"	
+)
+
+var newFileNameToBeCreated = "platformbrigade.txt"
+	
+//This is using os package
+
+func main(){
+	
+	_,err := os.Create(newFileNameToBeCreated)
+	if err != nil{
+		log.Fatal(err)
+	}else{
+		f, err := os.OpenFile(newFileNameToBeCreated, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)	
+		//O_APPEND -- Appends data to file when writing
+		//O_CREATE -- Creates a new file if not exists
+		//O_WRONLY -- Open the file write only.
+
+		if err != nil{
+			log.Fatal(err)
+		}
+
+		if _, err := f.Write([]byte("appended some data\n")); err != nil {
+			f.Close() // ignore error; Write error takes precedence
+			log.Fatal(err)
+		}
+		if err := f.Close(); err != nil {
+			log.Fatal(err)
+		}
+		
+		//Rename files 
+		errr:= os.Rename("1.txt", "renamed.txt")
+		if errr != nil{
+			log.Fatal(errr)
+		}
+
+		//Create a directory
+		err1 := os.Mkdir("platform",os.ModePerm)
+		if err1 != nil{
+			log.Fatal(err1)
+		}
+
+		// //remove a file
+		errRem := os.Remove("renamed.txt")
+		if errRem != nil{
+			log.Fatal(errRem)
+		}
+	}
+	
+
+}
